@@ -1,6 +1,6 @@
 import QtQuick 2.3
-import QtQuick.Controls 1.2
-import QtQuick.Controls.Styles 1.2
+//import QtQuick.Controls 1.2
+//import QtQuick.Controls.Styles 1.2
 import "."
 
 Rectangle {
@@ -96,9 +96,9 @@ Rectangle {
                 anchors.topMargin: Style.dp(20)
 
                 // 1st rot ----------------------
-                Label {
+                Text {
                     text: "Level (ml):"
-                    font.pixelSize: levelTextField.font.pixelSize
+                    //font.pixelSize: levelTextField.font.pixelSize
                 }
                 TextField {
                     id: levelTextField

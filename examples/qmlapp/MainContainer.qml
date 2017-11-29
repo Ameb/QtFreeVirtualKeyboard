@@ -17,9 +17,9 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import QtQuick.FreeVirtualKeyboard 1.0
+import freevirtualkeyboard 1.0
 import QtQuick.Window 2.0
-
+import "."
 
 Rectangle {
     id: root

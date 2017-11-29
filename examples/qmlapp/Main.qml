@@ -17,115 +17,135 @@
 ****************************************************************************/
 
 import QtQuick 2.0
-import "content"
+import freevirtualkeyboard 1.0
+import "./content"
 
 Rectangle {
-    width: parent.width
-    height: parent.height
+    width: screenGeometry.width
+    height: screenGeometry.height
     color: "#005F3F"
+    Rectangle {
+        id: appContainer
+        width: parent.width
+        height: 1200
+        Flickable {
+            id: flickable
 
-    Flickable {
-        id: flickable
+            property real scrollMarginVertical: 20
 
-        property real scrollMarginVertical: 20
+            anchors.fill: parent
+            contentWidth: content.width
+            contentHeight: content.height
+            interactive: contentHeight > height
+            flickableDirection: Flickable.VerticalFlick
+            children: ScrollBar {}
 
-        anchors.fill: parent
-        contentWidth: content.width
-        contentHeight: content.height
-        interactive: contentHeight > height
-        flickableDirection: Flickable.VerticalFlick
-        children: ScrollBar {}
+            MouseArea  {
+                id: content
 
-        MouseArea  {
-            id: content
+                width: flickable.width
+                height: textEditors.height + 24
 
-            width: flickable.width
-            height: textEditors.height + 24
+                onClicked: focus = true
 
-            onClicked: focus = true
+                Column {
+                    id: textEditors
+                    spacing: 15
+                    x: 12; y: 12
+                    width: parent.width - 26
 
-            Column {
-                id: textEditors
-                spacing: 15
-                x: 12; y: 12
-                width: parent.width - 26
+                    Text {
+                        color: "#EEEEEE"
+                        text: "Tap fields to enter text"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.pixelSize: 22
+                    }
+                    TextField {
+                        width: parent.width
+                        previewText: "One line field"
+                        //enterKeyAction: EnterKeyAction.Next
+                        onEnterKeyClicked: passwordField.focus = true
+                        objectName: "One line field"
+                    }
+                    TextField {
+                        id: passwordField
 
-                Text {
-                    color: "#EEEEEE"
-                    text: "Tap fields to enter text"
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 22 
+                        width: parent.width
+                        echoMode: TextInput.Password
+                        previewText: "Password field"
+                        inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
+                        //enterKeyAction: EnterKeyAction.Next
+                        onEnterKeyClicked: upperCaseField.focus = true
+                    }
+                    TextField {
+                        id: upperCaseField
+
+                        width: parent.width
+                        previewText: "Upper case field"
+                        inputMethodHints: Qt.ImhUppercaseOnly
+                        //enterKeyAction: EnterKeyAction.Next
+                        onEnterKeyClicked: lowerCaseField.focus = true
+                    }
+                    TextField {
+                        id: lowerCaseField
+
+                        width: parent.width
+                        previewText: "Lower case field"
+                        inputMethodHints: Qt.ImhLowercaseOnly
+                        //enterKeyAction: EnterKeyAction.Next
+                        onEnterKeyClicked: phoneNumberField.focus = true
+                    }
+                    TextField {
+                        id: phoneNumberField
+
+                        validator: RegExpValidator { regExp: /^[0-9\+\-\#\*\ ]{6,}$/ }
+                        width: parent.width
+                        previewText: "Phone number field"
+                        inputMethodHints: Qt.ImhDialableCharactersOnly
+                        //enterKeyAction: EnterKeyAction.Next
+                        onEnterKeyClicked: formattedNumberField.focus = true
+                    }
+                    TextField {
+                        id: formattedNumberField
+
+                        width: parent.width
+                        previewText: "Formatted number field"
+                        inputMethodHints: Qt.ImhFormattedNumbersOnly
+                        //enterKeyAction: EnterKeyAction.Next
+                        onEnterKeyClicked: digitsField.focus = true
+                    }
+                    TextField {
+                        id: digitsField
+
+                        width: parent.width
+                        previewText: "Digits only field"
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        //enterKeyAction: EnterKeyAction.Next
+                        onEnterKeyClicked: textArea.focus = true
+                    }
+                    TextArea {
+                        id: textArea
+
+                        width: parent.width
+                        previewText: "Multiple lines field"
+                        height: Math.max(206, implicitHeight)
+                    }
                 }
-                TextField {
-                    width: parent.width
-                    previewText: "One line field"
-                    //enterKeyAction: EnterKeyAction.Next
-                    onEnterKeyClicked: passwordField.focus = true
-                    objectName: "One line field"
-                }
-                TextField {
-                    id: passwordField
-
-                    width: parent.width
-                    echoMode: TextInput.Password
-                    previewText: "Password field"
-                    inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
-                    //enterKeyAction: EnterKeyAction.Next
-                    onEnterKeyClicked: upperCaseField.focus = true
-                }
-                TextField {
-                    id: upperCaseField
-
-                    width: parent.width
-                    previewText: "Upper case field"
-                    inputMethodHints: Qt.ImhUppercaseOnly
-                    //enterKeyAction: EnterKeyAction.Next
-                    onEnterKeyClicked: lowerCaseField.focus = true
-                }
-                TextField {
-                    id: lowerCaseField
-
-                    width: parent.width
-                    previewText: "Lower case field"
-                    inputMethodHints: Qt.ImhLowercaseOnly
-                    //enterKeyAction: EnterKeyAction.Next
-                    onEnterKeyClicked: phoneNumberField.focus = true
-                }
-                TextField {
-                    id: phoneNumberField
-
-                    validator: RegExpValidator { regExp: /^[0-9\+\-\#\*\ ]{6,}$/ }
-                    width: parent.width
-                    previewText: "Phone number field"
-                    inputMethodHints: Qt.ImhDialableCharactersOnly
-                    //enterKeyAction: EnterKeyAction.Next
-                    onEnterKeyClicked: formattedNumberField.focus = true
-                }
-                TextField {
-                    id: formattedNumberField
-
-                    width: parent.width
-                    previewText: "Formatted number field"
-                    inputMethodHints: Qt.ImhFormattedNumbersOnly
-                    //enterKeyAction: EnterKeyAction.Next
-                    onEnterKeyClicked: digitsField.focus = true
-                }
-                TextField {
-                    id: digitsField
-
-                    width: parent.width
-                    previewText: "Digits only field"
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    //enterKeyAction: EnterKeyAction.Next
-                    onEnterKeyClicked: textArea.focus = true
-                }
-                TextArea {
-                    id: textArea
-
-                    width: parent.width
-                    previewText: "Multiple lines field"
-                    height: Math.max(206, implicitHeight)
-                }
+            }
+        }
+    }
+    InputPanel {
+        id: inputPanel
+        z: 99
+        y: appContainer.height
+        anchors.left: parent.left
+        anchors.right: parent.right
+        states: State {
+            name: "visible"
+            when: Qt.inputMethod.visible
+            PropertyChanges {
+                target: inputPanel
+                y: appContainer.height - inputPanel.height
             }
         }
     }

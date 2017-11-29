@@ -16,13 +16,19 @@
 #include <QFontDatabase>
 #include <QDebug>
 #include <QScreen>
+#include <QDir>
 
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(QsgEpaperPlugin)
 
 /**
  * main entry point for application
  */
 int main(int argc, char *argv[])
 {
+    qputenv("QMLSCENE_DEVICE", "epaper");
+    qputenv("QT_QPA_PLATFORM", "epaper:enable_fonts");
+    qputenv("QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS", "rotate=180");
     // Load virtualkeyboard input context plugin
     qputenv("QT_IM_MODULE", QByteArray("freevirtualkeyboard"));
 
@@ -34,15 +40,20 @@ int main(int argc, char *argv[])
     app.setFont(QFont("DejaVu Sans"));
     app.setObjectName("QGuiApplication");
 
+    qDebug() << "DEPLOYMENT_PATK:" << QDir(DEPLOYMENT_PATH).absolutePath();
+
     QQuickView view;
-    //view.setSource(QString("qrc:/MainContainer.qml"));
-    view.engine()->rootContext()->setContextProperty("screenPixelDensity",
-        QGuiApplication::primaryScreen()->physicalDotsPerInch());
-    view.setSource(QString("MainContainer.qml"));
+    //QQmlContext *rootContext = view.rootContext();
+    view.rootContext()->setContextProperty("screenPixelDensity",
+                                    QGuiApplication::primaryScreen()->physicalDotsPerInch());
+    view.rootContext()->setContextProperty("screenGeometry",
+                                    app.primaryScreen()->geometry());
+    view.setSource(QDir(DEPLOYMENT_PATH).filePath("Main.qml"));
     view.setObjectName("QQuickView");
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.engine()->setObjectName("QQuickEngine");
     view.engine()->addImportPath(qApp->applicationDirPath());
+    qDebug() << "qApp->applicationDirPath" << qApp->applicationDirPath();
 
     // Set size to 800 x 480 WXGA - this is the size of the upcoming Manga
     // screen.
