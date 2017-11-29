@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import FreeVirtualKeyboard 1.0
+import freevirtualkeyboard 1.0
 
 /**
  * This is the type implements one single key button in the InputPanel
@@ -142,7 +142,7 @@ Item {
     }
 
     onInputPanelChanged: {
-        console.log("onInputPanelChanged: " + inputPanel.objectName);
+        //console.log("onInputPanelChanged: " + inputPanel.objectName);
     }
 
     /**
